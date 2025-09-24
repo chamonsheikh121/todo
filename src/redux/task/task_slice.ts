@@ -16,6 +16,14 @@ const initialState: ITask_Initial_State = {
       is_completed: false,
       priority: "high",
     },
+    {
+      id: "ajkcdjasadjsk",
+      title: "Initialized frontend",
+      description: "create a home page and routing setup",
+      due_date: "2025-11",
+      is_completed: false,
+      priority: "high",
+    },
   ],
 };
 
