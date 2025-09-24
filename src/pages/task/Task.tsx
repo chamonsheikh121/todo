@@ -5,7 +5,7 @@ import { select_task } from "@/redux/task/task_slice";
 
 const Task = () => {
   const tasks = useAppSelector(select_task);
- 
+ console.log(tasks)
   return (
     <div className="mt-20">
       <div className="flex  p-6 rounded-md justify-between items-center">

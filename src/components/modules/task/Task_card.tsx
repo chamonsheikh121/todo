@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { TTask } from "@/types";
+import { format } from "date-fns";
 
 type TTask_Props = {
   task: TTask;
@@ -23,7 +24,7 @@ const Task_card = ({ task }: TTask_Props) => {
         <div>
           <h2 className="text-lg font-semibold">{task.title}</h2>
           <p className="text-gray-600">{task.description}</p>
-          <p className="text-sm text-gray-400">Due: {task.due_date}</p>
+          <p className="text-sm text-gray-400">Due: {task.due_date instanceof Date ? format(task.due_date, "PPP") : task.due_date}</p>
         </div>
       </div>
 

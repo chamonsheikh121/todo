@@ -16,8 +16,14 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -26,13 +32,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import {useAppDispatch} from "@/redux/hook"
+import { add_task } from "@/redux/task/task_slice";
+
 
 export function Add_Task_Modal() {
   const form = useForm();
- 
+const dispatch = useAppDispatch()
   const on_submit = (data) => {
-    console.log(data);
+
+    console.log(data)
+    dispatch(add_task(data))
   };
 
   return (
@@ -50,10 +64,10 @@ export function Add_Task_Modal() {
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(on_submit)}>
+            <form className="space-y-5" onSubmit={form.handleSubmit(on_submit)}>
               <FormField
                 control={form.control}
-                name="Title"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Title</FormLabel>
@@ -65,7 +79,7 @@ export function Add_Task_Modal() {
               />
               <FormField
                 control={form.control}
-                name="Description"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Description</FormLabel>
@@ -76,29 +90,80 @@ export function Add_Task_Modal() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="Priority"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Priority</FormLabel>
+              <div className="flex items-center gap-5 justify-between">
+               <div className="flex-1">
+                 <FormField
+                
+                  control={form.control}
+                  name="priority"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Priority</FormLabel>
 
-                    <FormControl>
-                      <Select onValueChange={field.onChange} value={field.value} >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Priority" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="high">high</SelectItem>
-                          <SelectItem value="medium">medidum</SelectItem>
-                          <SelectItem value="low">low</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-             
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-full ">
+                            <SelectValue placeholder="Priority" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="high">high</SelectItem>
+                            <SelectItem value="medium">medidum</SelectItem>
+                            <SelectItem value="low">low</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+               </div>
+
+             <div className="flex-1">
+                   <FormField
+                  control={form.control}
+                  name="due_date"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Due Date</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date < new Date("1900-01-01")
+                            }
+                            captionLayout="dropdown"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+             </div>
+              </div>
 
               <Button type="submit" className="mt-6">
                 Save changes
