@@ -38,14 +38,16 @@ import { CalendarIcon, LucideEdit } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { TTask } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { delete_task, update_task } from "@/redux/task/task_slice";
+import { update_task } from "@/redux/task/task_slice";
 import { select_users } from "@/redux/users/user_slice";
+import { useState } from "react";
 
 type TUpdate_task_modal_props = {
   task: TTask;
 };
 
 export function Update_Task_Modal({ task }: TUpdate_task_modal_props) {
+  const [open, setOpen] = useState(false);
   const form = useForm({
     defaultValues: {
       title: task?.title || "",
@@ -56,7 +58,7 @@ export function Update_Task_Modal({ task }: TUpdate_task_modal_props) {
     },
   });
   const dispatch = useAppDispatch();
-  const users = useAppSelector(select_users)
+  const users = useAppSelector(select_users);
 
   const on_submit = (data: Partial<TTask>) => {
     const update_data = {
@@ -67,10 +69,12 @@ export function Update_Task_Modal({ task }: TUpdate_task_modal_props) {
       },
     };
     dispatch(update_task(update_data));
+    form.reset();
+    setOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger asChild>
           <Button variant="outline">

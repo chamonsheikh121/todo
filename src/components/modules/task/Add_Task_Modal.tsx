@@ -39,8 +39,10 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { add_task } from "@/redux/task/task_slice";
 import { select_users } from "@/redux/users/user_slice";
+import { useState } from "react";
 
 export function Add_Task_Modal() {
+  const [open, setOpen] = useState(false);
   const form = useForm();
   const dispatch = useAppDispatch();
   const users = useAppSelector(select_users);
@@ -50,10 +52,12 @@ export function Add_Task_Modal() {
       due_date: data.due_date ? data.due_date.toISOString() : null,
     };
     dispatch(add_task(date_modified_data));
+    form.reset();
+    setOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger asChild>
           <Button variant="outline" className="cursor-pointer">

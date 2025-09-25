@@ -33,7 +33,7 @@ const Task = () => {
         <p>tasks</p>
         <div className="flex items-center gap-10">
           <div>
-            <Tabs defaultValue="account">
+            <Tabs defaultValue="all">
               <TabsList>
                 {tab_item?.map((tab) => (
                   <TabsTrigger
