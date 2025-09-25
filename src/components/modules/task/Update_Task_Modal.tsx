@@ -34,35 +34,52 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, LucideEdit } from "lucide-react";
 import { useForm } from "react-hook-form";
+import type { TTask } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { add_task } from "@/redux/task/task_slice";
+import { delete_task, update_task } from "@/redux/task/task_slice";
 import { select_users } from "@/redux/users/user_slice";
 
-export function Add_Task_Modal() {
-  const form = useForm();
+type TUpdate_task_modal_props = {
+  task: TTask;
+};
+
+export function Update_Task_Modal({ task }: TUpdate_task_modal_props) {
+  const form = useForm({
+    defaultValues: {
+      title: task?.title || "",
+      description: task?.description || "",
+      priority: task?.priority || "medium",
+      assigned_user: task?.assigned_user || "",
+      due_date: task?.due_date ? new Date(task.due_date) : undefined,
+    },
+  });
   const dispatch = useAppDispatch();
-  const users = useAppSelector(select_users);
-  const on_submit = (data) => {
-    const date_modified_data = {
-      ...data,
-      due_date: data.due_date ? data.due_date.toISOString() : null,
+  const users = useAppSelector(select_users)
+
+  const on_submit = (data: Partial<TTask>) => {
+    const update_data = {
+      id: task.id,
+      updates: {
+        ...data,
+        due_date: data.due_date ? data.due_date.toISOString() : null,
+      },
     };
-    dispatch(add_task(date_modified_data));
+    dispatch(update_task(update_data));
   };
 
   return (
     <Dialog>
       <form>
         <DialogTrigger asChild>
-          <Button variant="outline" className="cursor-pointer">
-            Add Task
+          <Button variant="outline">
+            <LucideEdit size={15} />
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Task</DialogTitle>
+            <DialogTitle>Update Task</DialogTitle>
             <DialogDescription className="sr-only">
               Make changes to your profile here. Click save when you&apos;re
               done.
@@ -197,7 +214,7 @@ export function Add_Task_Modal() {
               </div>
 
               <Button type="submit" className="mt-6">
-                Save changes
+                Update
               </Button>
             </form>
           </Form>
