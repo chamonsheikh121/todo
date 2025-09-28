@@ -4,7 +4,7 @@ export type TTask = {
   description: string;
   due_date: Date; // or Date if you want to convert it
   is_completed: boolean;
-  assigned_user?: string; 
+  assigned_user: string| null; 
   priority: "low" | "medium" | "high"; // restrict to these values
 };
 

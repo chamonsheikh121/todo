@@ -1,13 +1,19 @@
 import { Add_Task_Modal } from "@/components/modules/task/Add_Task_Modal";
 import Task_card from "@/components/modules/task/Task_card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { filter_task, select_task } from "@/redux/task/task_slice";
-
+import { useGet_taskQuery } from "@/redux/api/RTK_Query";
+import { useAppDispatch } from "@/redux/hook";
+import { filter_task } from "@/redux/task/task_slice";
 const Task = () => {
-  const tasks = useAppSelector(select_task);
+  const { data, isLoading, isError } = useGet_taskQuery(undefined, {
+    // pollingInterval: 30000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+  });
   const dispatch = useAppDispatch();
 
+  console.log(data, isLoading, isError);
   const tab_item = [
     {
       name: "All",
@@ -57,9 +63,8 @@ const Task = () => {
           <Add_Task_Modal />
         </div>
       </div>
-      {tasks?.map((task) => (
-        <Task_card task={task} key={task.id} />
-      ))}
+      {isLoading ||
+        data?.tasks?.map((task) => <Task_card task={task} key={task.id} />)}
     </div>
   );
 };

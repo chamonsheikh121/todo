@@ -36,22 +36,27 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { add_task } from "@/redux/task/task_slice";
-import { select_users } from "@/redux/users/user_slice";
+// import { select_users } from "@/redux/users/user_slice";
 import { useState } from "react";
+import { useCreate_taskMutation } from "@/redux/api/RTK_Query";
+import type { TTask } from "@/types";
 
 export function Add_Task_Modal() {
   const [open, setOpen] = useState(false);
   const form = useForm();
-  const dispatch = useAppDispatch();
-  const users = useAppSelector(select_users);
-  const on_submit = (data) => {
+
+  const [create_task, { data, isLoading, isError }] = useCreate_taskMutation();
+
+  const on_submit = async (data: TTask) => {
     const date_modified_data = {
       ...data,
       due_date: data.due_date ? data.due_date.toISOString() : null,
+      isCompleted: false,
     };
-    dispatch(add_task(date_modified_data));
+    console.log(date_modified_data);
+
+    const res = await create_task(date_modified_data).unwrap()
+    console.log(res);
     form.reset();
     setOpen(false);
   };
@@ -99,7 +104,7 @@ export function Add_Task_Modal() {
                   </FormItem>
                 )}
               />
-              <div className="flex-1">
+              {/* <div className="flex-1">
                 <FormField
                   control={form.control}
                   name="assigned_user"
@@ -127,7 +132,7 @@ export function Add_Task_Modal() {
                     </FormItem>
                   )}
                 />
-              </div>
+              </div> */}
               <div className="flex items-center gap-5 justify-between">
                 <div className="flex-1">
                   <FormField

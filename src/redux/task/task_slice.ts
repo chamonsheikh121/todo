@@ -72,7 +72,7 @@ const task_slice = createSlice({
   extraReducers: (builders) => {
     builders.addCase(delete_user, (state, action: PayloadAction<string>) => {
       state.tasks.forEach((task) =>
-        task.assigned_user == action.payload ? (task.assigned_user = undefined) : task
+        task.assigned_user == action.payload ? (task.assigned_user = null) : task
       );
     });
   },

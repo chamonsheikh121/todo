@@ -1,12 +1,12 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { useAppDispatch } from "@/redux/hook";
 import { delete_task, is_completed_toggle } from "@/redux/task/task_slice";
 import type { TTask } from "@/types";
 import { format } from "date-fns";
 import { LucideTrash } from "lucide-react";
 import { Update_Task_Modal } from "./Update_Task_Modal";
-import { select_users } from "@/redux/users/user_slice";
+// import { select_users } from "@/redux/users/user_slice";
 
 type TTask_Props = {
   task: TTask;
@@ -14,8 +14,8 @@ type TTask_Props = {
 
 const Task_card = ({ task }: TTask_Props) => {
   const dispatch = useAppDispatch();
-  const users = useAppSelector(select_users);
-  const assigned_user = users.find((user)=>user.id == task.assigned_user)
+  // const users = useAppSelector(select_users);
+  // const assigned_user = users.find((user)=>user.id == task.assigned_user)
   console.log();
   return (
     <div className="flex items-center justify-around shadow-md rounded-lg p-4 mb-4 border mx-auto hover:shadow-lg transition-shadow">
@@ -35,7 +35,7 @@ const Task_card = ({ task }: TTask_Props) => {
             "line-through": task.is_completed
           })}>{task.title}</h2>
           <p className="text-gray-600">{task.description}</p>
-          <p className="text-gray-600">Assigned to : { assigned_user ? assigned_user?.name:'None'}</p>
+          {/* <p className="text-gray-600">Assigned to : { assigned_user ? assigned_user?.name:'None'}</p> */}
           <p className="text-sm text-gray-400">
             Due:{" "}
             {task.due_date instanceof Date

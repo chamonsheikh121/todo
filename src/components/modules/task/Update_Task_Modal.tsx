@@ -39,7 +39,7 @@ import { useForm } from "react-hook-form";
 import type { TTask } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { update_task } from "@/redux/task/task_slice";
-import { select_users } from "@/redux/users/user_slice";
+// import { select_users } from "@/redux/users/user_slice";
 import { useState } from "react";
 
 type TUpdate_task_modal_props = {
@@ -53,12 +53,12 @@ export function Update_Task_Modal({ task }: TUpdate_task_modal_props) {
       title: task?.title || "",
       description: task?.description || "",
       priority: task?.priority || "medium",
-      assigned_user: task?.assigned_user || "",
+      // assigned_user: task?.assigned_user || "",
       due_date: task?.due_date ? new Date(task.due_date) : undefined,
     },
   });
   const dispatch = useAppDispatch();
-  const users = useAppSelector(select_users);
+  // const users = useAppSelector(select_users);
 
   const on_submit = (data: Partial<TTask>) => {
     const update_data = {
@@ -116,7 +116,7 @@ export function Update_Task_Modal({ task }: TUpdate_task_modal_props) {
                   </FormItem>
                 )}
               />
-              <div className="flex-1">
+              {/* <div className="flex-1">
                 <FormField
                   control={form.control}
                   name="assigned_user"
@@ -144,7 +144,7 @@ export function Update_Task_Modal({ task }: TUpdate_task_modal_props) {
                     </FormItem>
                   )}
                 />
-              </div>
+              </div> */}
               <div className="flex items-center gap-5 justify-between">
                 <div className="flex-1">
                   <FormField

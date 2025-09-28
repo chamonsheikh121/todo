@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import task_slice from "./task/task_slice";
-import user_slice from "./users/user_slice";
+import { base_api } from "./api/RTK_Query";
+
 export const store = configureStore({
   reducer: {
-    todo: task_slice,
-    users: user_slice,
+    [base_api.reducerPath]: base_api.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(base_api.middleware),
 });
+
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
